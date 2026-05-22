@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Web Estudiantil Enrique Gil Gilbert</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --color-primario: #ff2a75;   
+            --color-secundario: #ff003c; 
+            --color-acento: #ff3344;     
+            --color-valores: #b06ab3;    
+            --color-exito: #00e676;      
+            --bg-gradiente: linear-gradient(135deg, #110c14 0%, #070408 100%);
+            --fuente: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        html, body {
+            width: 100%; min-height: 100vh; background: var(--bg-gradiente);
+            color: #ffffff; font-family: var(--fuente);
+            overflow-x: hidden; -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px; margin: 0 auto; padding: 20px 16px;
+            display: grid; grid-template-columns: 1fr; gap: 24px;
+        }
+
+        @media (min-width: 992px) {
+            .container { grid-template-columns: 1.3fr 0.7fr; padding: 35px 24px; }
+        }
+
+        header { text-align: center; margin-bottom: 5px; grid-column: 1 / -1; }
+        
+        .titulo-principal { 
+            font-size: calc(1.6rem + 1vw); 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            letter-spacing: -0.5px; 
+            user-select: none;
+        }
+        .titulo-principal span { 
+            background: linear-gradient(to right, var(--color-primario), var(--color-secundario)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        
+        .creditos {
+            color: #a0aec0; font-size: calc(0.8rem + 0.2vw); margin-top: 6px; font-weight: 500;
+            background: rgba(255, 255, 255, 0.04); padding: 5px 14px; border-radius: 20px; display: inline-block;
+        }
+
+        .verse-box {
+            background: rgba(255, 42, 117, 0.05); border: 1px dashed rgba(255, 42, 117, 0.25);
+            border-radius: 14px; padding: 12px; margin: 15px auto 0 auto; max-width: 650px; text-align: center;
+        }
+        .verse-text { font-size: 13px; color: #ffaecf; font-style: italic; font-weight: 500; }
+        .verse-ref { font-size: 11px; color: var(--color-primario); font-weight: 700; margin-top: 3px; display: block; text-transform: uppercase; }
+
+        .card {
+            background: rgba(20, 14, 24, 0.8); border: 2px solid rgba(255, 42, 117, 0.15);
+            border-radius: 24px; padding: calc(18px + 1.5vw); display: flex; flex-direction: column;
+            justify-content: center; min-height: 460px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.6); position: relative; overflow: hidden;
+        }
+
+        .screen { display: none; text-align: center; }
+        .screen.active { display: flex; flex-direction: column; gap: 24px; }
+
+        input[type="text"] {
+            background: #1a121e; border: 2px solid rgba(255,255,255,0.08);
+            border-radius: 12px; padding: 16px; color: #ffffff;
+            font-size: 18px; text-align: center; outline: none; width: 100%;
+            transition: all 0.2s ease; font-weight: 700;
+        }
+        input[type="text"]:focus { border-color: var(--color-primario); box-shadow: 0 0 15px rgba(255, 42, 117, 0.25); }
+
+        .btn {
+            background: linear-gradient(90deg, var(--color-primario) 0%, var(--color-secundario) 100%); color: #ffffff; border: none;
+            padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 800; text-transform: uppercase;
+            cursor: pointer; transition: all 0.2s ease; box-shadow: 0 5px 15px rgba(255, 42, 117, 0.3);
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-danger { background: #ff003c; box-shadow: 0 5px 15px rgba(255, 0, 60, 0.3); }
+
+        .subjects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-top: 5px; }
+        
+        .btn-subject {
+            border: none; color: #ffffff; padding: 20px 14px; border-radius: 16px; font-size: 14px; font-weight: 800;
+            cursor: pointer; transition: all 0.2s ease; text-transform: uppercase; display: flex; flex-direction: column; align-items: center; gap: 6px;
+        }
+        .btn-subject.lengua { background: linear-gradient(135deg, #ff2a75 0%, #ba134e 100%); }
+        .btn-subject.sociales { background: linear-gradient(135deg, #ff003c 0%, #9e0024 100%); }
+        .btn-subject.naturales { background: linear-gradient(135deg, #201726 0%, #3a2544 100%); border: 1px solid rgba(255, 42, 117, 0.3); }
+        .btn-subject.matematicas { background: linear-gradient(135deg, #ff5e97 0%, #ff2a75 100%); }
+        .btn-subject.valores { background: linear-gradient(135deg, #b06ab3 0%, #4568dc 100%); }
+        .btn-subject:hover { transform: translateY(-4px); filter: brightness(1.1); }
+
+        .options-container { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
+        .btn-option {
+            background: rgba(255, 255, 255, 0.03); border: 2px solid rgba(255, 255, 255, 0.06); color: #ffffff;
+            padding: 16px 20px; border-radius: 14px; font-size: 16px; font-weight: 700;
+            cursor: pointer; text-align: left; transition: all 0.2s ease;
+        }
+        .btn-option:hover { background: rgba(255, 42, 117, 0.08); border-color: var(--color-primario); }
+
+        .stats-bar {
+            display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; font-size: 13px; font-weight: 700;
+            background: rgba(255,255,255,0.04); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); gap: 5px;
+        }
+        .streak-badge { color: #ff9900 !important; }
+
+        .question-text { font-size: calc(1.15rem + 0.4vw); font-weight: 700; margin: 15px 0; line-height: 1.4; color: #fff; }
+
+        .confetti {
+            position: absolute; width: 8px; height: 8px; background: var(--color-primario);
+            top: -10px; z-index: 10; opacity: 0.8; border-radius: 50%;
+            animation: fall 3s linear infinite;
+        }
+
+        @keyframes fall {
+            0% { top: -10px; transform: translateX(0) rotate(0deg); }
+            100% { top: 100%; transform: translateX(100px) rotate(360deg); }
+        }
+
+        .flash-correct { background: linear-gradient(135deg, #092013 0%, #070408 100%) !important; }
+        .flash-wrong { background: linear-gradient(135deg, #2d080c 0%, #070408 100%) !important; }
+
+        .leaderboard-box {
+            background: rgba(16, 11, 19, 0.9); border: 2px solid rgba(255, 42, 117, 0.1);
+            border-radius: 24px; padding: 24px; height: fit-content; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column; gap: 16px;
+        }
+        .leaderboard-box h2 { font-size: 19px; font-weight: 800; border-bottom: 2px solid rgba(255,255,255,0.06); padding-bottom: 12px; text-transform: uppercase; color: var(--color-primario); }
+        .top-list { list-style: none; display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto; }
+        .top-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: rgba(255,255,255,0.02); border-radius: 12px; font-size: 14px; font-weight: 700; }
+        .top-item:nth-child(1) { background: rgba(255, 42, 117, 0.1); border: 1px solid var(--color-primario); color: #ffaecf; }
+        .top-rank { font-weight: 800; color: var(--color-primario); margin-right: 6px; }
+
+        /* Botón de acceso directo al administrador */
+        .btn-admin-access {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+            color: #718096; padding: 10px; border-radius: 10px; font-size: 12px; font-weight: 700;
+            cursor: pointer; width: 100%; transition: all 0.2s; margin-top: 5px;
+        }
+        .btn-admin-access:hover { background: rgba(255, 0, 60, 0.1); border-color: rgba(255, 0, 60, 0.3); color: #ff003c; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1 class="titulo-principal">Web Estudiantil <span>Enrique Gil Gilbert</span></h1>
+            <p class="creditos">Desarrollada por el estudiante: David Alejandro De La Cruz Roja</p>
+            
+            <div class="verse-box">
+                <p class="verse-text">"Porque el Señor da la sabiduría; conocimiento y ciencia brotan de su boca."</p>
+                <span class="verse-ref">Proverbios 2:6</span>
+            </div>
+        </header>
+
+        <div class="card" id="game-card">
+            
+            <!-- PANTALLA 1: REGISTRO -->
+            <div class="screen active" id="screen-login">
+                <h2>Evaluación General de Conocimientos</h2>
+                <p style="color: #a0aec0; font-size: 15px;">Registra tu participación ingresando tus nombres completos.</p>
+                <input type="text" id="student-name" placeholder="Ej. David Alejandro" maxlength="25" required>
+                <button class="btn" onclick="registerStudent()">Comenzar Desafío</button>
+            </div>
+
+            <!-- PANTALLA 2: MENÚ -->
+            <div class="screen" id="screen-menu">
+                <h2>¿Por cuál asignatura empezamos, <span id="welcome-name" style="color: var(--color-primario);"></span>?</h2>
+                <p style="color: #a0aec0; font-size: 15px;">Meta de aprobación: 250 puntos. ¡Sumas 40 puntos por acierto!</p>
+                <div class="subjects-grid">
+                    <button class="btn-subject lengua" onclick="startTrivia('lengua')"><span>📚</span><span>Lengua y Lit.</span></button>
+                    <button class="btn-subject sociales" onclick="startTrivia('sociales')"><span>🌍</span><span>Est. Sociales</span></button>
+                    <button class="btn-subject naturales" onclick="startTrivia('naturales')"><span>🔬</span><span>Ciencias Nat.</span></button>
+                    <button class="btn-subject matematicas" onclick="startTrivia('matematicas')"><span>📐</span><span>Matemáticas</span></button>
+                    <button class="btn-subject valores" onclick="startTrivia('valores')"><span>💎</span><span>Cultura y Valores</span></button>
+                </div>
+            </div>
+
+            <!-- PANTALLA 3: INTERFAZ DE JUEGO -->
+            <div class="screen" id="screen-game">
+                <div class="stats-bar">
+                    <span>Puntos: <b id="score">0</b></span>
+                    <span>Racha: <b id="streak" class="streak-badge">0 🔥</b></span>
+                    <span>Vidas: <b id="lives" style="color:var(--color-acento);">5</b></span>
+                </div>
+                <div class="question-text" id="question-box">-</div>
+                <div class="options-container" id="options-box"></div>
+            </div>
+
+            <!-- PANTALLA 4: REPORTE -->
+            <div class="screen" id="screen-over">
+                <h2 id="result-title">Evaluación Finalizada</h2>
+                <p id="result-desc" style="color: #a0aec0; font-size: 16px; line-height: 1.5;"></p>
+                <div style="font-size: 42px; font-weight: 800; margin: 15px 0; color: var(--color-primario);" id="rep-score">0 Puntos</div>
+                <button class="btn" onclick="goToMenu()">Evaluar Otra Asignatura</button>
+            </div>
+
+            <!-- PANTALLA 5: PANEL DE ADMIN -->
+            <div class="screen" id="screen-admin">
+                <h2>Control de Administrador</h2>
+                <p style="color: #a0aec0; font-size: 14px;">Gestión de tabla de posiciones local.</p>
+                <button class="btn btn-danger" onclick="clearLeaderboard()">🗑️ Borrar Todos los Registrados</button>
+                <button class="btn" style="background:#4568dc;" onclick="injectFakeData()">⚡ Generar Alumnos de Prueba</button>
+                <button class="btn" onclick="showScreen('screen-login')">Volver al Inicio</button>
+            </div>
+
+        </div>
+
+        <!-- CUADRO DE HONOR -->
+        <div class="leaderboard-box">
+            <h2>🏆 Top 20 General</h2>
+            <ul class="top-list" id="leaderboard"></ul>
+            
+            <!-- NUEVO: Botón físico que no falla jamás -->
+            <button class="btn-admin-access" onclick="checkAdminPassword()">⚙️ no tocar ⚠️</button>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = "123"; 
+
+        let currentStudent = "";
+        let currentSubject = "";
+        let currentScore = 0;
+        let currentLives = 5; 
+        let currentStreak = 0;
+        let activeQuestionIndex = 0;
+        let selectedQuestionsPool = [];
+        let confettiInterval = null;
+
+        let localLeaderboard = JSON.parse(localStorage.getItem('trivia_records')) || [];
+
+        const bank = {
+            lengua: [
+                { q: "¿Quién escribió la famosa novela ecuatoriana 'Huasipungo'?", o: ["Medardo Ángel Silva", "Jorge Icaza", "Juan León Mera", "José de la Cuadra"], a: "Jorge Icaza" },
+                { q: "Identifica el sustantivo propio en la oración: 'El río Guayas es muy ancho'", o: ["Río", "Ancho", "Guayas", "Muy"], a: "Guayas" },
+                { q: "¿Quién escribió la letra del Himno Nacional del Ecuador?", o: ["Antonio Neumane", "Juan León Mera", "Eloy Alfaro", "Vicente Rocafuerte"], a: "Juan León Mera" },
+                { q: "¿A qué grupo literario ecuatoriano perteneció el poeta Medardo Ángel Silva?", o: ["Generación de los 30", "Los Tzántzicos", "Generación Decapitada", "El Modernismo Temprano"], a: "Generación Decapitada" },
+                { q: "Identifica el verbo en: 'Los estudiantes de Guayaquil exponen un gran proyecto'", o: ["Estudiantes", "Exponen", "Gran", "Guayaquil"], a: "Exponen" }
+            ],
+            sociales: [
+                { q: "¿En qué provincia de Ecuador se encuentra la Mitad del Mundo?", o: ["Guayas", "Pichincha", "Azuay", "Manabí"], a: "Pichincha" },
+                { q: "¿Cuál es la capital de la provincia del Guayas?", o: ["Manta", "Quito", "Cuenca", "Guayaquil"], a: "Guayaquil" },
+                { q: "¿Qué presidente ecuatoriano lideró la Revolución Liberal e impulsó el ferrocarril?", o: ["Gabriel García Moreno", "Eloy Alfaro", "Jaime Roldós Aguilera", "Juan José Flores"], a: "Eloy Alfaro" },
+                { q: "¿En qué año se fundó la República del Ecuador al separarse de la Gran Colombia?", o: ["1809", "1822", "1830", "1895"], a: "1830" }
+            ],
+            naturales: [
+                { q: "¿Qué archipiélago ecuatoriano es famoso por los estudios de Charles Darwin?", o: ["Islas Puná", "Islas Galápagos", "Archipiélago de Jambelí", "Isla de la Plata"], a: "Islas Galápagos" },
+                { q: "Cuál es el ave símbolo del Ecuador que está en el Escudo Nacional?", o: ["El Papagayo", "El Colibrí", "El Cóndor Andino", "La Fragata"], a: "El Cóndor Andino" },
+                { q: "¿Cuál de las regiones naturales del Ecuador posee la mayor densidad de selva tropical?", o: ["Región Costa", "Región Sierra", "Región Amazónica", "Región Insular"], a: "Región Amazónica" }
+            ],
+            matematicas: [
+                { q: "Un turista compra una artesanía en Otavalo por $15.50 y un sombrero por $24.50. ¿Cuánto gasta?", o: ["$40.00", "$39.50", "$41.00", "$38.00"], a: "$40.00" },
+                { q: "Si la distancia de Guayaquil a Salinas es 120 km y ya recorriste x km, quedando 40 km (x + 40 = 120), ¿cuánto vale x?", o: ["60 km", "80 km", "90 km", "100 km"], a: "80 km" },
+                { q: "Se recolectan 4/10 de cajas de cacao por la mañana y 3/10 por la tarde. ¿Qué fracción total es?", o: ["7/20", "1/10", "7/10", "5/10"], a: "7/10" }
+            ],
+            valores: [
+                { q: "¿Qué personaje bíblico guió con fe al pueblo de Israel a través del Mar Rojo?", o: ["Moisés", "Abraham", "David", "José"], a: "Moisés" },
+                { q: "¿Quién derrotó al gigante Goliat usando una honda y una piedra confiando plenamente en Dios?", o: ["Salomón", "David", "Sansón", "Saúl"], a: "David" },
+                { q: "Según los Proverbios, ¿cuál es el principio fundamental de la verdadera sabiduría?", o: ["El dinero", "El temor y respeto al Señor", "La fama", "La fuerza física"], a: "El temor y respeto al Señor" }
+            ]
+        };
+
+        // Función del nuevo botón directo
+        function checkAdminPassword() {
+            const password = prompt("Introduce la clave de Administrador:");
+            if(password === ADMIN_PASSWORD) {
+                showScreen('screen-admin');
+            } else if(password !== null) {
+                alert("Clave incorrecta.");
+            }
+        }
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function registerStudent() {
+            const name = document.getElementById('student-name').value.trim();
+            if(name === "") return alert("Por favor, introduce tu nombre.");
+            currentStudent = name;
+            document.getElementById('welcome-name').innerText = currentStudent;
+            showScreen('screen-menu');
+        }
+
+        function startTrivia(subject) {
+            currentSubject = subject;
+            currentScore = 0;
+            currentLives = 5; 
+            currentStreak = 0;
+            activeQuestionIndex = 0;
+            stopConfetti();
+            
+            selectedQuestionsPool = [...bank[subject]].sort(() => Math.random() - 0.5);
+
+            document.getElementById('score').innerText = currentScore;
+            document.getElementById('lives').innerText = currentLives;
+            document.getElementById('streak').innerText = currentStreak + " 🔥";
+
+            showScreen('screen-game');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if(currentScore >= 250 || activeQuestionIndex >= selectedQuestionsPool.length || currentLives <= 0) {
+                endTrivia();
+                return;
+            }
+
+            const currentQ = selectedQuestionsPool[activeQuestionIndex];
+            document.getElementById('question-box').innerText = currentQ.q;
+            
+            const optionsBox = document.getElementById('options-box');
+            optionsBox.innerHTML = '';
+
+            let options = [...currentQ.o].sort(() => Math.random() - 0.5);
+            options.forEach(opt => {
+                const button = document.createElement('button');
+                button.className = 'btn-option';
+                button.innerText = opt;
+                button.onclick = () => verifySelection(opt, currentQ.a);
+                optionsBox.appendChild(button);
+            });
+        }
+
+        function verifySelection(chosen, correct) {
+            const body = document.body;
+            
+            if(chosen === correct) {
+                currentScore += 40; 
+                currentStreak++;
+                document.getElementById('score').innerText = currentScore;
+                document.getElementById('streak').innerText = currentStreak + " 🔥";
+                body.classList.add('flash-correct');
+                setTimeout(() => body.classList.remove('flash-correct'), 250);
+            } else {
+                currentLives--;
+                currentStreak = 0; 
+                document.getElementById('lives').innerText = currentLives;
+                document.getElementById('streak').innerText = currentStreak + " 🔥";
+                body.classList.add('flash-wrong');
+                setTimeout(() => body.classList.remove('flash-wrong'), 250);
+            }
+
+            activeQuestionIndex++;
+            setTimeout(loadQuestion, 200);
+        }
+
+        function endTrivia() {
+            document.getElementById('rep-score').innerText = currentScore + " Puntos";
+            const title = document.getElementById('result-title');
+            const desc = document.getElementById('result-desc');
+
+            if(currentScore >= 250) {
+                title.innerText = "¡Objetivo Cumplido! 🏆✨";
+                title.style.color = "var(--color-exito)";
+                desc.innerHTML = `<b>¡Felicidades, ${currentStudent}!</b><br>Has superado la meta en ${currentSubject.toUpperCase()}.`;
+                startConfetti(); 
+            } else {
+                title.innerText = "Evaluación Finalizada";
+                title.style.color = "#ffffff";
+                desc.innerText = `${currentStudent}, terminaste en ${currentSubject.toUpperCase()} con ${currentScore} puntos.`;
+            }
+
+            showScreen('screen-over');
+
+            localLeaderboard.push({
+                estudiante: currentStudent,
+                materia: currentSubject,
+                puntos: currentScore
+            });
+            saveAndRender();
+        }
+
+        function clearLeaderboard() {
+            if(confirm("¿Seguro que quieres borrar todos los alumnos registrados?")) {
+                localLeaderboard = [];
+                saveAndRender();
+                alert("Tabla vaciada.");
+            }
+        }
+
+        function injectFakeData() {
+            const fakeData = [
+                { estudiante: "Juan Pérez", materia: "valores", puntos: 280 },
+                { estudiante: "María Solís", materia: "matematicas", puntos: 240 },
+                { estudiante: "Carlos Andrade", materia: "sociales", puntos: 160 }
+            ];
+            localLeaderboard = [...localLeaderboard, ...fakeData];
+            saveAndRender();
+            alert("Alumnos agregados.");
+        }
+
+        function saveAndRender() {
+            localStorage.setItem('trivia_records', JSON.stringify(localLeaderboard));
+            renderLeaderboard();
+        }
+
+        function renderLeaderboard() {
+            const list = document.getElementById('leaderboard');
+            list.innerHTML = '';
+
+            let sorted = [...localLeaderboard].sort((a,b) => b.puntos - a.puntos);
+
+            if(sorted.length > 0) {
+                sorted.slice(0, 20).forEach((user, idx) => {
+                    const li = document.createElement('li');
+                    li.className = 'top-item';
+                    li.innerHTML = `
+                        <span><span class="top-rank">#${idx+1}</span> ${user.estudiante} <small style="color:#a0aec0; font-size:10px;">(${user.materia})</small></span>
+                        <span style="color:${user.puntos >= 250 ? 'var(--color-exito)' : 'var(--color-primario)'}; font-weight:800;">${user.puntos} pts</span>
+                    `;
+                    list.appendChild(li);
+                });
+            } else {
+                list.innerHTML = '<li style="color: #a0aec0; text-align: center; padding: 20px;">Sin registros en el Cuadro de Honor.</li>';
+            }
+        }
+
+        function startConfetti() {
+            const card = document.getElementById('game-card');
+            confettiInterval = setInterval(() => {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = ['#ff2a75', '#ff003c', '#ff5e97', '#00e676'][Math.floor(Math.random() * 4)];
+                card.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }, 100);
+        }
+
+        function stopConfetti() {
+            clearInterval(confettiInterval);
+            document.querySelectorAll('.confetti').forEach(c => c.remove());
+        }
+
+        function goToMenu() {
+            stopConfetti();
+            showScreen('screen-menu');
+        }
+
+        renderLeaderboard();
+    </script>
+</body>
+</html>
