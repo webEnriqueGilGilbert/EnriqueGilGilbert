@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>CHURU INTROS - PORTAFOLIO PREMIUM</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght=700;900&family=Rajdhani:wght=500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root {
+    --blue-neon: #0055ff;
+    --blue-glow: rgba(0, 85, 255, 0.3);
+    --white-neon: #ffffff;
+    --white-glow: rgba(255, 255, 255, 0.2);
+    --bg-dark: #000000;
+    --panel-dark: #05070f;
+    --border-rgba: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Rajdhani', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* --- EFECTOS DE FONDO Y LUCES --- */
+#particles-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    pointer-events: none;
+}
+
+.ambient-light {
+    position: fixed;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    filter: blur(130px);
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.25;
+    animation: pulseGlow 6s infinite alternate ease-in-out;
+}
+.light-blue { top: -60px; right: -60px; background: var(--blue-neon); }
+.light-white { bottom: -60px; left: -60px; background: var(--white-neon); }
+
+@keyframes pulseGlow {
+    0% { transform: scale(1); opacity: 0.2; }
+    100% { transform: scale(1.15); opacity: 0.35; }
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.9); opacity: 0.4; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(0.9); opacity: 0.4; }
+}
+
+/* --- PANTALLA DE LOGIN / REGISTRO --- */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+    z-index: 10;
+}
+
+.auth-box {
+    background: var(--panel-dark);
+    border: 2px solid var(--white-neon);
+    box-shadow: 0 0 25px var(--white-glow);
+    border-radius: 24px;
+    width: 100%;
+    max-width: 420px;
+    padding: 40px 30px;
+    text-align: center;
+    position: relative;
+    backdrop-filter: blur(10px);
+}
+
+.auth-box::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: 20px;
+    right: 20px;
+    height: 2px;
+    background: var(--blue-neon);
+    box-shadow: 0 0 15px var(--blue-neon);
+}
+
+.auth-box h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px var(--blue-neon);
+}
+
+.auth-subtitle {
+    font-size: 14px;
+    color: #a0aec0;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #4a5568;
+    font-size: 16px;
+}
+
+.input-group input {
+    width: 100%;
+    background: #020306;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-left: 3px solid var(--blue-neon);
+    padding: 14px 14px 14px 45px;
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-color: var(--white-neon);
+    background: #04060d;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.auth-btn {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--white-neon);
+    border: 1px solid var(--white-neon);
+    padding: 14px;
+    border-radius: 12px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: 900;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    transition: 0.2s;
+}
+
+.auth-btn:hover {
+    background: var(--white-neon);
+    color: #000000;
+    box-shadow: 0 0 20px var(--white-neon);
+}
+
+.auth-toggle-text {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #718096;
+    font-weight: 600;
+}
+
+.auth-toggle-text span { color: var(--blue-neon); cursor: pointer; font-weight: 700; }
+
+/* --- INTERFAZ DEL PANEL --- */
+.app-interface { display: none; }
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: var(--panel-dark);
+    border-bottom: 2px solid var(--white-neon);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+    position: fixed;
+    top: 0; left: 0; width: 100%; z-index: 100;
+}
+
+.brand-section { display: flex; align-items: center; gap: 15px; }
+.menu-toggle {
+    background: transparent; border: 2px solid var(--white-neon); color: var(--white-neon);
+    width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+
+.logo { font-family: 'Orbitron', sans-serif; font-size: 1.4rem; font-weight: 900; color: #ffffff; cursor: pointer; text-shadow: 0 0 8px var(--blue-neon); }
+.header-badge {
+    background: #020306; border: 1px solid var(--border-rgba); padding: 6px 14px; border-radius: 20px;
+    font-family: 'Orbitron', sans-serif; font-size: 11px; color: var(--white-neon); display: flex; align-items: center; gap: 6px; font-weight: 900; letter-spacing: 1px;
+}
+
+/* --- SIDEBAR --- */
+.sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px); z-index: 998; opacity: 0; pointer-events: none; transition: 0.3s; }
+.sidebar-overlay.active { opacity: 1; pointer-events: auto; }
+.sidebar { position: fixed; top: 70px; left: -280px; width: 280px; height: calc(100vh - 70px); background: #020205; border-right: 1px solid var(--border-rgba); z-index: 999; transition: 0.3s; padding: 20px 15px; overflow-y: auto; }
+.sidebar.active { left: 0; }
+
+.user-profile-card { background: var(--panel-dark); padding: 15px; border-radius: 16px; margin-bottom: 15px; border-left: 3px solid var(--blue-neon); }
+.profile-meta { display: flex; align-items: center; gap: 12px; }
+
+.user-avatar-logo { 
+    width: 46px; 
+    height: 46px; 
+    border-radius: 50%; 
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+    object-fit: cover;
+}
+
+.user-info h4 { font-size: 14px; font-weight: 700; color: #fff; }
+.status-tag { font-size: 11px; color: var(--blue-neon); font-weight: 700; text-transform: uppercase; }
+
+.profile-details-list { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 13px; color: #a0aec0; line-height: 1.6; }
+.profile-details-list span { color: #ffffff; font-weight: 600; }
+.logout-btn { color: #ff66cc; cursor: pointer; font-weight: 700; text-transform: uppercase; font-size: 11px; margin-top: 8px; display: inline-block; font-family: 'Orbitron', sans-serif; }
+
+/* --- REDES SOCIALES --- */
+.sidebar-socials-box {
+    background: #05070f;
+    border: 1px solid var(--white-neon);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 12px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.social-icon-btn {
+    font-size: 18px;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    background: transparent;
+    z-index: 1;
+    transition: all 0.25s ease-in-out;
+}
+
+.social-icon-btn::before {
+    content: '';
+    position: absolute;
+    inset: 1.5px;
+    background: #020306;
+    border-radius: 9px;
+    z-index: -1;
+    transition: background 0.25s ease-in-out;
+}
+
+.social-icon-btn::after {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    z-index: -2;
+    animation: rotarBordeRedes 3s linear infinite;
+}
+
+@keyframes rotarBordeRedes {
+    100% { transform: rotate(360deg); }
+}
+
+.social-icon-btn.yt-hover { color: #ff0000; box-shadow: 0 0 5px rgba(255, 0, 0, 0.2); }
+.social-icon-btn.yt-hover::after { background: conic-gradient(from 0deg, #ff0000, transparent 60%, #ff0000); }
+.social-icon-btn.tt-hover { color: #00f2fe; box-shadow: 0 0 5px rgba(0, 242, 254, 0.2); }
+.social-icon-btn.tt-hover::after { background: conic-gradient(from 0deg, #00f2fe, transparent 60%, #00f2fe); }
+.social-icon-btn.ws-hover { color: #25d366; box-shadow: 0 0 5px rgba(37, 211, 102, 0.2); }
+.social-icon-btn.ws-hover::after { background: conic-gradient(from 0deg, #25d366, transparent 60%, #25d366); }
+.social-icon-btn.dc-hover { color: #5865f2; box-shadow: 0 0 5px rgba(88, 101, 242, 0.2); }
+.social-icon-btn.dc-hover::after { background: conic-gradient(from 0deg, #5865f2, transparent 60%, #5865f2); }
+
+.nav-title { font-family: 'Orbitron', sans-serif; font-size: 11px; color: #4a5568; letter-spacing: 1px; margin: 20px 0 8px 5px; text-transform: uppercase; }
+.nav-container { display: flex; flex-direction: column; gap: 6px; }
+.nav-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; color: #ffffff; text-decoration: none; background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.02); border-radius: 10px; font-size: 14px; font-weight: 600; transition: 0.2s; cursor: pointer; }
+.nav-item:hover { background: rgba(255, 255, 255, 0.03); border-color: var(--white-neon); }
+.nav-item-left { display: flex; align-items: center; gap: 12px; }
+.nav-item-left i { color: var(--blue-neon); font-size: 15px; }
+
+/* --- CONTENIDO PRINCIPAL --- */
+.main-content { margin-top: 70px; padding: 20px; max-width: 1100px; margin-left: auto; margin-right: auto; }
+.futuristic-banner { background: linear-gradient(135deg, rgba(0, 85, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%), #05070f; border: 1px solid var(--border-rgba); border-radius: 20px; padding: 25px; margin-bottom: 25px; position: relative; }
+.futuristic-banner h1 { font-family: 'Orbitron', sans-serif; font-size: 22px; color: #fff; letter-spacing: 1px; }
+
+.static-churu-banner {
+    width: 100%;
+    margin-bottom: 25px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--blue-neon);
+    box-shadow: 0 0 15px rgba(0, 85, 255, 0.2);
+}
+.static-churu-banner img { width: 100%; display: block; object-fit: cover; }
+
+.dynamic-view { display: none; }
+.dynamic-view.active { display: block; }
+
+.panel-section { background: var(--panel-dark); border: 1px solid var(--border-rgba); border-radius: 20px; padding: 20px; position: relative; margin-bottom: 25px; }
+.section-title { font-family: 'Orbitron', sans-serif; font-size: 13px; color: var(--white-neon); letter-spacing: 1px; margin-bottom: 20px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
+
+.premium-info-box { background: #020306; border: 1px solid rgba(255, 255, 255, 0.05); border-left: 4px solid var(--blue-neon); border-radius: 14px; padding: 20px; }
+.premium-info-box p { font-size: 16px; line-height: 1.6; color: #e2e8f0; }
+.highlight-blue { color: var(--blue-neon); font-weight: 700; font-family: 'Orbitron', sans-serif; }
+
+.back-home-container { margin-bottom: 20px; display: flex; }
+.btn-back-home { background: rgba(0, 85, 255, 0.05); color: #ffffff; border: 1px solid var(--blue-neon); padding: 10px 16px; border-radius: 10px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+.btn-back-home:hover { background: var(--blue-neon); box-shadow: 0 0 15px var(--blue-neon); }
+
+.products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.card { background: #020306; border: 1px solid rgba(255, 255, 255, 0.02); border-left: 4px solid var(--white-neon); border-radius: 16px; padding: 20px; position: relative; display: flex; flex-direction: column; justify-content: space-between; }
+
+/* --- CONTENEDOR MULTIMEDIA DE LA TARJETA --- */
+.card-media-wrapper {
+    position: relative;
+    width: 100%;
+    height: 160px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    background: #000207;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.card-media-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Icono de Play sobrepuesto en la miniatura de los videos */
+.video-preview-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.video-preview-overlay i {
+    font-size: 35px;
+    color: #ffffff;
+    text-shadow: 0 0 15px var(--blue-neon);
+    transition: 0.2s;
+}
+.video-preview-overlay:hover { background: rgba(0, 0, 0, 0.2); }
+.video-preview-overlay:hover i { transform: scale(1.15); color: var(--blue-neon); }
+
+.product-tag { position: absolute; top: 20px; right: 20px; padding: 4px 10px; border-radius: 6px; font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 900; text-transform: uppercase; z-index: 5; }
+.tag-TOP { background: rgba(0, 85, 255, 0.15); color: #0055ff; border: 1px solid #0055ff; }
+.tag-NUEVO { background: rgba(255, 255, 255, 0.1); color: #ffffff; border: 1px solid #ffffff; }
+
+.card h2 { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: #ffffff; margin-bottom: 6px; }
+.card p { margin: 8px 0; color: #a0aec0; font-size: 14px; line-height: 1.4; }
+.price-row { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 12px; }
+.price { font-family: 'Orbitron', sans-serif; font-size: 20px; color: #ffffff; font-weight: 900; }
+
+.btn-buy { background: rgba(255, 255, 255, 0.02); color: var(--white-neon); border: 1px solid var(--white-neon); padding: 10px 18px; border-radius: 10px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; cursor: pointer; text-transform: uppercase; text-decoration: none; display: inline-block; text-align: center; transition: 0.2s; }
+.btn-buy:hover { background: var(--white-neon); color: #000000; box-shadow: 0 0 15px var(--white-neon); }
+
+/* Botón interactivo de abrir intro en la tarjeta */
+.btn-action-open {
+    width: 100%;
+    background: rgba(0, 85, 255, 0.08);
+    color: #ffffff;
+    border: 1px solid var(--blue-neon);
+    padding: 10px;
+    border-radius: 10px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.2s;
+}
+.btn-action-open:hover { background: var(--blue-neon); box-shadow: 0 0 12px var(--blue-neon); }
+
+/* --- VENTANA MODAL FLOTANTE INTERACTIVA (EL REPRODUCTOR) --- */
+.cyber-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.cyber-modal.active { display: flex; }
+
+.modal-box {
+    background: var(--panel-dark);
+    border: 2px solid var(--white-neon);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 650px;
+    overflow: hidden;
+    position: relative;
+    animation: openModalAnim 0.3s cubic-bezier(0.1, 0.8, 0.3, 1);
+}
+@keyframes openModalAnim {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header {
+    padding: 15px 20px;
+    background: #020306;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.modal-title { font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 900; letter-spacing: 1px; color: #fff; }
+.modal-close-btn { background: transparent; border: none; color: #ff4444; font-size: 18px; cursor: pointer; transition: 0.2s; }
+.modal-close-btn:hover { transform: scale(1.2); }
+
+.modal-body { padding: 20px; }
+.modal-video-container { width: 100%; height: auto; max-height: 340px; border-radius: 12px; overflow: hidden; background: #000; border: 1px solid rgba(255, 255, 255, 0.05); }
+.modal-video-container video { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+.modal-controls-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+}
+.btn-modal-ctrl {
+    background: #020306;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 8px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: 0.2s;
+}
+.btn-modal-play:hover { border-color: var(--blue-neon); background: rgba(0, 85, 255, 0.05); }
+.btn-modal-pause:hover { border-color: #ff3333; background: rgba(255, 51, 51, 0.05); }
+.btn-modal-fullscreen:hover { border-color: var(--white-neon); background: rgba(255, 255, 255, 0.05); }
+</style>
+</head>
+<body>
+
+<canvas id="particles-canvas"></canvas>
+<div class="ambient-light light-blue"></div>
+<div class="ambient-light light-white"></div>
+
+<div class="cyber-modal" id="videoModalPlayer">
+    <div class="modal-box">
+        <div class="modal-header">
+            <span class="modal-title" id="modalVideoTitle">REPRODUCTOR DE INTROS</span>
+            <button class="modal-close-btn" onclick="closeIntroModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-video-container">
+                <video id="mainModalVideo" loop muted playsinline></video>
+            </div>
+            <div class="modal-controls-bar">
+                <button class="btn-modal-ctrl btn-modal-play" onclick="playModalVideo()">
+                    <i class="fa-solid fa-play" style="color:var(--blue-neon)"></i> Reproducir
+                </button>
+                <button class="btn-modal-ctrl btn-modal-pause" onclick="pauseModalVideo()">
+                    <i class="fa-solid fa-pause" style="color:#ff3333"></i> Pausar
+                </button>
+                <button class="btn-modal-ctrl btn-modal-fullscreen" onclick="fullscreenModalVideo()">
+                    <i class="fa-solid fa-expand"></i> Pantalla Completa
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="auth-container" id="authSection">
+    <div class="auth-box">
+        <h2 id="authTitle">CHURU INTROS</h2>
+        <p class="auth-subtitle" id="authSub">Alejo VIP</p>
+        <form id="authForm" onsubmit="handleAuth(event)">
+            <div class="input-group">
+                <input type="text" id="authInputUser" placeholder="Nombre de Usuario" required>
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="input-group">
+                <input type="password" id="authInputPass" placeholder="Contraseña" required>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <button type="submit" class="auth-btn" id="authSubmitBtn">Ingresar</button>
+        </form>
+        <p class="auth-toggle-text" id="authToggleText">
+            ¿No tienes una cuenta? <span onclick="toggleAuthMode()">Regístrate aquí</span>
+        </p>
+    </div>
+</div>
+
+<div class="app-interface" id="appInterfaceSection">
+    <div class="top-bar">
+        <div class="brand-section">
+            <button class="menu-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+            <span class="logo" onclick="switchViewDirecto('view-inicio')">CHURU INTROS</span>
+        </div>
+        <div class="top-bar-right">
+            <div class="header-badge"><i class="fa-solid fa-circle-check"></i> DISCORD VERIFIED</div>
+        </div>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebarPanel">
+        <div class="user-profile-card">
+            <div class="profile-meta">
+                <img src="image2.png" class="user-avatar-logo" alt="Logo">
+                <div class="user-info">
+                    <h4 id="displayUsername">...</h4>
+                    <span class="status-tag"><i class="fa-solid fa-bolt"></i> ACCESO PREMIUM</span>
+                </div>
+            </div>
+            <div class="profile-details-list">
+                <div>ID Diseñador: <span id="detUser">...</span></div>
+                <div>Estatus: <span style="color:var(--blue-neon)">Miembro VIP</span></div>
+                <div class="logout-btn" onclick="cerrarSesionLocalStorage()">Cerrar Sesión <i class="fa-solid fa-right-from-bracket"></i></div>
+            </div>
+        </div>
+
+        <div class="nav-title">Redes Oficiales</div>
+        <div class="sidebar-socials-box">
+            <a href="https://youtube.com/@churusex?si=74qdLsg2pUOh5U2J" target="_blank" class="social-icon-btn yt-hover" title="YouTube">
+                <i class="fa-brands fa-youtube"></i>
+            </a>
+            <a href="https://www.tiktok.com/@churusexo2?_r=1&_t=ZS-97ItbxZgyen" target="_blank" class="social-icon-btn tt-hover" title="TikTok">
+                <i class="fa-brands fa-tiktok"></i>
+            </a>
+            <a href="https://chat.whatsapp.com/E4oAgitwVvHI9RG4MyQRXW" target="_blank" class="social-icon-btn ws-hover" title="WhatsApp">
+                <i class="fa-brands fa-whatsapp"></i>
+            </a>
+            <a href="https://discord.gg/hVDXe8gFmN" target="_blank" class="social-icon-btn dc-hover" title="Discord">
+                <i class="fa-brands fa-discord"></i>
+            </a>
+        </div>
+
+        <div class="nav-title">Navegación General</div>
+        <div class="nav-container">
+            <div class="nav-item" onclick="switchView('view-inicio')">
+                <div class="nav-item-left"><i class="fa-solid fa-house"></i> <span>Volver al Inicio</span></div>
+            </div>
+        </div>
+
+        <div class="nav-title">Apartados Multimedia</div>
+        <div class="nav-container" id="dynamicNavLinks"></div>
+    </div>
+
+    <div class="main-content">
+        <div id="liveAlertBox" style="display:none; background:#05070f; border:1px solid var(--blue-neon); box-shadow: 0 0 15px rgba(0,85,255,0.2); border-left:4px solid #ffffff; padding:15px; border-radius:14px; margin-bottom:20px;">
+            <div style="display:flex; align-items:center; gap:10px; font-family:'Orbitron', sans-serif; font-size:11px; font-weight:900; color:var(--blue-neon); margin-bottom:4px;">
+                <span style="width:7px; height:7px; background:var(--blue-neon); border-radius:50%; display:inline-block; animation:pulse 1.5s infinite;"></span> ALERTA EN VIVO
+            </div>
+            <p id="liveAlertText" style="font-size:14px; color:#ffffff; font-weight:600;"></p>
+        </div>
+
+        <div class="static-churu-banner">
+            <img src="image.png" alt="Churu Edition Banner">
+        </div>
+
+        <div class="futuristic-banner">
+            <h1 id="welcomeTitle">BIENVENIDO AL PORTAFOLIO</h1>
+        </div>
+
+        <div id="view-inicio" class="dynamic-view active">
+            <div class="panel-section">
+                <div class="premium-info-box">
+                    <p>Despliega el <span class="highlight-blue">Menú Desplegable Superior</span> para examinar el catálogo de intros, efectos especiales de última generación y muestras de renderizado exclusivo en tiempo real.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="dynamic-views-container"></div>
+    </div>
+</div>
+
+<script>
+// VARIABLES GLOBALES DECLARADAS CORRECTAMENTE
+const FIREBASE_DB_URL = "https://alejofirebase-default-rtdb.firebaseio.com/";
+let isLoginMode = true; // REPARADO: Declarada explícitamente para evitar bloqueos en Android/iOS
+let apartadosGlobales = {};
+
+window.addEventListener('DOMContentLoaded', () => {
+    verificarPersistenciaSesion();
+    chequearAlertaGlobalRealtime();
+});
+
+function chequearAlertaGlobalRealtime() {
+    fetch(`${FIREBASE_DB_URL}/alerta_global.json?nocache=${new Date().getTime()}`)
+    .then(res => res.json())
+    .then(texto => {
+        const box = document.getElementById('liveAlertBox');
+        const txtLabel = document.getElementById('liveAlertText');
+        if(texto && texto.toString().trim() !== "" && texto !== "null") {
+            let textoLimpio = texto.replace(/^"|"$/g, '');
+            txtLabel.innerText = textoLimpio;
+            box.style.display = "block";
+        } else {
+            box.style.display = "none";
+        }
+    })
+    .catch(() => { document.getElementById('liveAlertBox').style.display = "none"; });
+}
+
+function cargarContenidoTiendaDesdeFirebase() {
+    fetch(`${FIREBASE_DB_URL}/apartados.json?nocache=${new Date().getTime()}`)
+    .then(res => res.json())
+    .then(data => {
+        if(!data) return;
+        apartadosGlobales = data;
+
+        const navContainer = document.getElementById('dynamicNavLinks');
+        const viewsContainer = document.getElementById('dynamic-views-container');
+        
+        navContainer.innerHTML = "";
+        viewsContainer.innerHTML = "";
+
+        Object.keys(data).forEach(idKey => {
+            const apartado = data[idKey];
+            const esVideoApartado = (apartado.tipo === "video");
+
+            const navBtn = document.createElement('div');
+            navBtn.className = "nav-item";
+            navBtn.setAttribute('onclick', `switchView('view-${idKey}')`);
+            
+            const iconoMenu = esVideoApartado ? "fa-video" : "fa-image";
+            navBtn.innerHTML = `
+                <div class="nav-item-left"><i class="fa-solid ${iconoMenu}"></i> <span>${apartado.nombre}</span></div>
+                <i class="fa-solid fa-chevron-right" style="font-size:11px;"></i>
+            `;
+            navContainer.appendChild(navBtn);
+
+            const viewDiv = document.createElement('div');
+            viewDiv.id = `view-${idKey}`;
+            viewDiv.className = "dynamic-view";
+
+            let productosHTML = "";
+            if(apartado.productos) {
+                Object.keys(apartado.productos).forEach(pKey => {
+                    const prod = apartado.productos[pKey];
+                    if(prod.estado === "nodisponible") return;
+
+                    const tagMarkup = (prod.tag && prod.tag !== "NINGUNO") ? `<div class="product-tag tag-${prod.tag}">${prod.tag === "TOP" ? "MÁS PEDIDO" : "NUEVO DESIGN"}</div>` : "";
+                    
+                    let mediaMarkup = "";
+                    let actionButtonMarkup = "";
+                    
+                    if(esVideoApartado || (prod.imagen && prod.imagen.startsWith("data:video"))) {
+                        mediaMarkup = `
+                            <div class="card-media-wrapper" onclick="openIntroModal('${encodeURIComponent(prod.titulo)}', '${prod.imagen}')">
+                                <img src="image2.png" style="opacity: 0.35; filter: blur(1px);" alt="Preview">
+                                <div class="video-preview-overlay">
+                                    <i class="fa-solid fa-play"></i>
+                                </div>
+                            </div>
+                        `;
+                        actionButtonMarkup = `
+                            <button class="btn-action-open" onclick="openIntroModal('${encodeURIComponent(prod.titulo)}', '${prod.imagen}')">
+                                <i class="fa-solid fa-folder-open"></i> Abrir Intro
+                            </button>
+                        `;
+                    } else {
+                        mediaMarkup = `
+                            <div class="card-media-wrapper">
+                                <img src="${prod.imagen || 'https://via.placeholder.com/500x300'}" alt="Preview">
+                            </div>
+                        `;
+                    }
+
+                    let mensajeWs = `https://wa.me/523223047832?text=¡Hola+Churu!+Me+interesa+adquirir+la+intro:+*${encodeURIComponent(prod.titulo)}*`;
+                    let enMantenimiento = prod.estado === "mantenimiento";
+                    let botonTexto = enMantenimiento ? `<i class="fa-solid fa-hourglass-half"></i> Sin Cupos` : `Encargar Intro`;
+                    let estilosBoton = enMantenimiento ? `opacity: 0.4; cursor: not-allowed; background: #111; color: #444; border-color: #333; pointer-events: none;` : "";
+
+                    productosHTML += `
+                        <div class="card">
+                            ${tagMarkup}
+                            ${mediaMarkup}
+                            <h2>${prod.titulo}</h2>
+                            <p>${prod.descripcion}</p>
+                            ${actionButtonMarkup}
+                            <div class="price-row">
+                                <div class="price">$${prod.precio}</div>
+                                <a href="${mensajeWs}" target="_blank" class="btn-buy" style="${estilosBoton}">${botonTexto}</a>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                productosHTML = "<p style='color:#a0aec0; padding: 10px;'>Próximamente se subirán nuevos diseños a este apartado.</p>";
+            }
+
+            viewDiv.innerHTML = `
+                <div class="back-home-container">
+                    <button class="btn-back-home" onclick="switchViewDirecto('view-inicio')">
+                        <i class="fa-solid fa-arrow-left"></i> Volver al Inicio
+                    </button>
+                </div>
+                <div class="panel-section">
+                    <div class="section-title">✨ ${apartado.nombre}</div>
+                    <div class="products-grid">${productosHTML}</div>
+                </div>
+            `;
+            viewsContainer.appendChild(viewDiv);
+        });
+    });
+}
+
+/* --- CONTROLADORES DE LA VENTANA MODAL --- */
+function openIntroModal(tituloEncoded, videoSrc) {
+    const modal = document.getElementById('videoModalPlayer');
+    const video = document.getElementById('mainModalVideo');
+    const titleLabel = document.getElementById('modalVideoTitle');
+    
+    titleLabel.innerText = decodeURIComponent(tituloEncoded).toUpperCase();
+    video.src = videoSrc;
+    modal.classList.add('active');
+    
+    setTimeout(() => { video.play().catch(() => {}); }, 100);
+}
+
+function closeIntroModal() {
+    const modal = document.getElementById('videoModalPlayer');
+    const video = document.getElementById('mainModalVideo');
+    video.pause();
+    video.src = ""; 
+    modal.classList.remove('active');
+}
+
+function playModalVideo() { document.getElementById('mainModalVideo').play(); }
+function pauseModalVideo() { document.getElementById('mainModalVideo').pause(); }
+function fullscreenModalVideo() {
+    const video = document.getElementById('mainModalVideo');
+    if (video.requestFullscreen) { video.requestFullscreen(); }
+    else if (video.webkitRequestFullscreen) { video.webkitRequestFullscreen(); } 
+    else if (video.msRequestFullscreen) { video.msRequestFullscreen(); }
+}
+
+function toggleAuthMode() {
+    isLoginMode = !isLoginMode;
+    const title = document.getElementById('authTitle');
+    const sub = document.getElementById('authSub');
+    const btn = document.getElementById('authSubmitBtn');
+    const toggleTxt = document.getElementById('authToggleText');
+    
+    if(!isLoginMode) {
+        title.innerText = "NUEVO REGISTRO"; sub.innerText = "Crea tu cuenta VIP"; btn.innerText = "Registrarme";
+        toggleTxt.innerHTML = '¿Ya tienes una cuenta? <span onclick="toggleAuthMode()">Inicia Sesión</span>';
+    } else {
+        title.innerText = "CHURU INTROS"; sub.innerText = "Acceso al Catálogo VIP"; btn.innerText = "Ingresar";
+        toggleTxt.innerHTML = '¿No tienes una cuenta? <span onclick="toggleAuthMode()">Regístrate aquí</span>';
+    }
+}
+
+function handleAuth(e) {
+    e.preventDefault();
+    const user = document.getElementById('authInputUser').value.trim().toLowerCase();
+    const pass = document.getElementById('authInputPass').value.trim();
+    
+    if(isLoginMode) {
+        fetch(`${FIREBASE_DB_URL}/usuarios/${user}.json`)
+        .then(res => res.json())
+        .then(userData => {
+            if(userData && userData.password === pass) {
+                localStorage.setItem('churu_intros_user', user);
+                localStorage.setItem('churu_intros_pass', pass);
+                activarInterfazUsuario(user);
+            } else { alert("Nombre de usuario o clave incorrectos."); }
+        })
+        .catch(err => { alert("Error de red o base de datos móvil."); });
+    } else {
+        fetch(`${FIREBASE_DB_URL}/usuarios/${user}.json`).then(res => res.json()).then(exists => {
+            if(exists) { alert("Este usuario ya se encuentra registrado."); } 
+            else {
+                const nuevoPerfil = { password: pass, fecha_registro: new Date().toLocaleDateString() };
+                fetch(`${FIREBASE_DB_URL}/usuarios/${user}.json`, { method: 'PUT', body: JSON.stringify(nuevoPerfil) }).then(() => {
+                    alert("¡Cuenta Premium Activada!");
+                    localStorage.setItem('churu_intros_user', user);
+                    localStorage.setItem('churu_intros_pass', pass);
+                    activarInterfazUsuario(user);
+                });
+            }
+        }).catch(err => { alert("Error en el registro móvil."); });
+    }
+}
+
+function activarInterfazUsuario(username) {
+    document.getElementById('authSection').style.display = 'none';
+    document.getElementById('appInterfaceSection').style.display = 'block';
+    
+    document.getElementById('welcomeTitle').innerText = `BIENVENIDO, ${username.toUpperCase()}`;
+    document.getElementById('displayUsername').innerText = username;
+    document.getElementById('detUser').innerText = username;
+    
+    cargarContenidoTiendaDesdeFirebase();
+}
+
+function verificarPersistenciaSesion() {
+    const localUser = localStorage.getItem('churu_intros_user');
+    const localPass = localStorage.getItem('churu_intros_pass');
+
+    if(localUser && localPass) {
+        fetch(`${FIREBASE_DB_URL}/usuarios/${localUser}.json`)
+        .then(res => res.json())
+        .then(userData => {
+            if(userData && userData.password === localPass) {
+                activarInterfazUsuario(localUser);
+            } else { cerrarSesionLocalStorage(); }
+        }).catch(() => { cerrarSesionLocalStorage(); });
+    }
+}
+
+function cerrarSesionLocalStorage() {
+    localStorage.removeItem('churu_intros_user');
+    localStorage.removeItem('churu_intros_pass');
+    document.getElementById('appInterfaceSection').style.display = 'none';
+    document.getElementById('authSection').style.display = 'flex';
+}
+
+function switchView(viewId) {
+    const views = document.querySelectorAll('.dynamic-view');
+    views.forEach(v => v.classList.remove('active'));
+    document.getElementById(viewId).classList.add('active');
+    toggleSidebar();
+}
+
+function switchViewDirecto(viewId) {
+    const views = document.querySelectorAll('.dynamic-view');
+    views.forEach(v => v.classList.remove('active'));
+    document.getElementById(viewId).classList.add('active');
+}
+
+function toggleSidebar() {
+    document.getElementById('sidebarPanel').classList.toggle('active');
+    document.getElementById('sidebarOverlay').classList.toggle('active');
+}
+
+/* --- CANVAS ENGINE --- */
+const canvas = document.getElementById('particles-canvas'); const ctx = canvas.getContext('2d'); let particles = [];
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+window.addEventListener('resize', resize); resize();
+class Particula {
+    constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.vY = Math.random() * 0.15 + 0.05; this.alpha = Math.random() * 0.3 + 0.1; }
+    moverse() { this.y -= this.vY; if(this.y < 0) this.y = canvas.height; }
+    pintar() { ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`; ctx.beginPath(); ctx.arc(this.x, this.y, 1, 0, Math.PI * 2); ctx.fill(); }
+}
+for(let i=0; i<30; i++) particles.push(new Particula());
+function loop() { ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p => { p.moverse(); p.pintar(); }); requestAnimationFrame(loop); }
+loop();
+</script>
+</body>
+</html>
